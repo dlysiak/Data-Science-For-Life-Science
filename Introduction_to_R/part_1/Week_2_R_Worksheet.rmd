@@ -202,12 +202,12 @@ CXCL12_control <- runif(1, 0, 100)
 # Calculate the expression ratio for these genes 
 # hint: use the control as the denominator
 # assign the expr ratio to a variable 'CXCL12_exp_ratio'
-
+CXCL12_exp_ratio <- CXCL12_treatment / CXCL12_control
 
 # [3]
 # Print the expression ratio using print() and paste0()
 # Insert "The expression ratio for CXCL12 is: "
-
+print(paste0("The expression ratio for CXCL12 is: ", CXCL12_exp_ratio ))
 
 ```
 
@@ -216,12 +216,12 @@ In the example above, you should get an expression ratio that is below 1. Lets a
 # [4]
 # Calculate the inverse transformation. i.e -1/(expression ratio).
 # store it in the variable 'CXCL12_inverse'
-
+CXCL12_inverse <-  -1/CXCL12_exp_ratio
 
 # [5]
 # Print it to the screen using print() and paste0()
 # Insert "The inverse transformation for CXCL12 is: "
-
+print(paste0("The inverse transformation for CXCL12 is: ", CXCL12_inverse ))
 
 ```
 
@@ -232,12 +232,12 @@ Now lets use the logarithmic base 2 transformation:
 # [6]
 # Calculate log2(expression ratio)
 # Store it in the variable 'CXCL12_log2'
-
+CXCL12_log2 <- log2(CXCL12_exp_ratio)
 
 # [7]
 # Print it using print() and paste0()
 # Insert "The log2 transformation of CXCL12 is: "
-
+print(paste0("The log2 transformation of CXCL12 is: ", CXCL12_log2))
 ```
 
 You should get a down-regulated log2 value of ~ -4
@@ -253,7 +253,9 @@ control <- c(sample(runif(10, 0, 1000)))
 
 # [8]
 # Using a for loop, print out each element of 'treatment'
-
+for (gene in treatment) {
+  print(gene)
+}
 
 
 # [9] 
@@ -264,6 +266,10 @@ control <- c(sample(runif(10, 0, 1000)))
 # hint: do not use for(i in treatment){}, assign a different variable such as j. i is already being used as an index.
 
 i <- 0 
+for (gene_exp in treatment){
+  i <- i +1
+  print(paste0("Gene_", i, " has an expression value of ", gene_exp ))
+}
 
 ```
 
@@ -275,7 +281,9 @@ Now lets loop over both vectors simultaneously. To do this, we can use 'for(i in
 # hint: in the for loop code block, you will have to assign gene expression values for each vector to a variable in order to print them for each iteration (treatment_value <- treatment[i],, control_value <- control[i])
 # The print code has been left in to help you:
   
-for(){
+for(i in 1:length(treatment)){
+  treatment_value <- treatment[i]
+  control_value <- control[i]
   print(paste0("Gene_",i," has an expression value of ", treatment_value, " in the treatment sample, and an expression value of ", control_value, " in the control sample"))
 }
 ```
@@ -286,7 +294,12 @@ Building on the previous code block, lets calculate the expression ratio.
 # using the same for(i in 1:lenght(treatment))...
 # assign a 3rd variable 'ratio' that is treatment_value / control_value
 # using print() and paste0(), print = "Gene_", i," expression ratio is ", ratio
-
+for (i in 1:length(treatment)){
+  treatment_value <- treatment[i]
+  control_value <- control[i]
+  ratio <- treatment_value/control_value
+  print(paste0("Gene_", i, " expression ratio is ", ratio))
+}
 
 ```
 
@@ -301,11 +314,22 @@ hint: before adding the newly calculated fold_change to the fold_change_vector, 
 # fold_change_vector to store output initialised:
 fold_change_vector <- c()
 
+for (i in 1:length(treatment)){
+  treatment_value <- treatment[i]
+  control_value <- control[i]
+  ratio <- treatment_value/control_value
+  if (ratio > 1){
+    fold_change <- ratio
+    fold_change_vector <- c(fold_change_vector, fold_change)
+  } else
+    fold_change <- -1/ratio
+    fold_change_vector <- c(fold_change_vector, fold_change)
+}
 
 
 # [13]
 # print the fold_change_vector
-
+print(fold_change_vector)
 ```
 
 Finally, calculate the log2 transformation of the expression ratio. There is no need to use an if..else in this loop.
@@ -317,8 +341,15 @@ Finally, calculate the log2 transformation of the expression ratio. There is no 
 # log2 vector to store output initialised:
 log2_vector <- c()
 
+for (i in 1:length(treatment)) {
+  treatment_value <- treatment[i]
+  control_value <- control[i]
+  ratio <- treatment_value/control_value
+  log2 <- log2(ratio)
+  log2_vector <- c(log2_vector, log2)
+}
 
 # [15]
 # print out the log2_vector
-
+print(log2_vector)
 ```
